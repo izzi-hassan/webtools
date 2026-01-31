@@ -1,11 +1,19 @@
 import { DashboardHeader } from "@/components/dashboard/header";
 import { SidebarNav } from "@/components/dashboard/sidebar-nav";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export default function DashboardLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
+  const { orgId } = auth();
+
+  if (!orgId) {
+    redirect("/select-org");
+  }
+
   return (
     <div className="min-h-screen bg-muted/40">
       <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[260px_1fr]">

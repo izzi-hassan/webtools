@@ -1,18 +1,27 @@
+"use client";
+
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+
 import { ModeToggle } from "@/components/mode-toggle";
 
 export function DashboardHeader() {
   return (
-    <header className="flex w-full items-center justify-between border-b bg-background px-4 py-4 lg:px-8">
-      <div>
-        <p className="text-sm text-muted-foreground">Organization</p>
-        <h1 className="text-lg font-semibold">Acme Properties</h1>
+    <header className="flex w-full flex-wrap items-center justify-between gap-4 border-b bg-background px-4 py-4 lg:px-8">
+      <div className="flex items-center gap-3">
+        <OrganizationSwitcher
+          hidePersonal
+          afterSelectOrganizationUrl="/"
+          afterCreateOrganizationUrl="/"
+          appearance={{
+            elements: {
+              organizationSwitcherTrigger: "h-9 px-2 text-sm"
+            }
+          }}
+        />
       </div>
       <div className="flex items-center gap-3">
-        <div className="hidden text-right text-sm md:block">
-          <p className="font-medium">Alex Morgan</p>
-          <p className="text-xs text-muted-foreground">alex@acme.co</p>
-        </div>
         <ModeToggle />
+        <UserButton afterSignOutUrl="/sign-in" />
       </div>
     </header>
   );
