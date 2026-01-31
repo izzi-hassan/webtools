@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 
 const stats = [
   { label: "Properties", value: "24", delta: "+4" },
@@ -31,13 +32,31 @@ const activity = [
   }
 ];
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const { orgId } = auth();
+  const organization = orgId
+    ? await clerkClient.organizations.getOrganization({ organizationId: orgId })
+    : null;
+
   return (
     <div className="flex flex-col gap-6">
       <div>
         <p className="text-sm text-muted-foreground">Dashboard</p>
         <h2 className="text-2xl font-semibold">Account Overview</h2>
       </div>
+
+      <Card>
+        <CardHeader className="pb-2">
+          <CardDescription>Active organization</CardDescription>
+          <CardTitle className="text-2xl">
+            {organization?.name ?? "No active organization"}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="text-sm text-muted-foreground">
+          <span className="font-medium text-foreground">Org ID:</span>{" "}
+          {organization?.id ?? "Not available"}
+        </CardContent>
+      </Card>
 
       <div className="grid gap-4 md:grid-cols-3">
         {stats.map((stat) => (
